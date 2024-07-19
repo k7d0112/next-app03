@@ -36,7 +36,7 @@ function Blog ({posts}:BlogProps) {
       {posts.map((post)=>{
         return (
           <li className='border border-slate-300 p-4 mb-8' key={post.id}>
-            <Link href={`/BlogDetail/${post.id}`}>
+            <Link href={`/blog_detail/${post.id}`}>
               <div className='flex justify-between items-center'>
                 <time className='text-[12.8px] text-slate-400 font-sans' dateTime={formatDateHyphen(post.createdAt)}>{formatDateSlash(post.createdAt)}</time>
                 <div>
