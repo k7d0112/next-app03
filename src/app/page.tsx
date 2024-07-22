@@ -3,17 +3,30 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
-type BlogPosts = {
-  id:number,
-  title:string,
-  content:string,
-  categories:string[],
-  createdAt:string,
-  thumbnailUrl:string,
+// type BlogPosts = {
+//   id:number,
+//   title:string,
+//   content:string,
+//   categories:string[],
+//   createdAt:string,
+//   thumbnailUrl:string,
+// };
+
+// type BlogProps = {
+//   posts:BlogPosts[],
+// };
+
+type MicroCmsPost = {
+  id: string
+  title: string
+  content: string
+  createdAt: string
+  categories: { id: string; name: string }[]
+  thumbnail: { url: string; height: number; width: number }
 };
 
 type BlogProps = {
-  posts:BlogPosts[],
+  posts:MicroCmsPost[],
 };
 
 function Blog ({posts}:BlogProps) {
@@ -33,14 +46,14 @@ function Blog ({posts}:BlogProps) {
   }
   return (
     <>
-      {posts.map((post)=>{
+      {posts.map((post:MicroCmsPost)=>{
         return (
           <li className='border border-slate-300 p-4 mb-8' key={post.id}>
             <Link href={`/blog_detail/${post.id}`}>
               <div className='flex justify-between items-center'>
                 <time className='text-[12.8px] text-slate-400 font-sans' dateTime={formatDateHyphen(post.createdAt)}>{formatDateSlash(post.createdAt)}</time>
                 <div>
-                  {post.categories.map((category,index)=><span className='border border-[#0066cc] text-[12.8px] text-[#0066cc] font-sans rounded mr-2 py-[3.2px] px-[6.4px]' key={index}>{category}</span>)}
+                  {post.categories.map((category,index)=><span className='border border-[#0066cc] text-[12.8px] text-[#0066cc] font-sans rounded mr-2 py-[3.2px] px-[6.4px]' key={index}>{category.name}</span>)}
                 </div>
               </div>
               <h1 className='mt-2 text-2xl text-zinc-800'>{post.title}</h1>
@@ -54,24 +67,43 @@ function Blog ({posts}:BlogProps) {
 }
 
 export default function Home() {
-  const [posts, setPosts] = useState<BlogPosts[]>([]);
+  const [posts, setPosts] = useState<MicroCmsPost[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  useEffect (() => {
+  // useEffect (() => {
+  //   const fetcher = async () => {
+  //     try {
+  //       const res = await fetch ('https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts');
+  //       const data = await res.json();
+  //       // console.log(data);
+  //       setPosts(data.posts);
+  //     } catch(error) {
+  //       console.error('記事取得中にエラーが発生しました：',error);
+  //     } finally {
+  //       setIsLoading (false);
+  //     }
+  //   }
+  //   fetcher();
+  // },[]);
+  useEffect(() => {
     const fetcher = async () => {
       try {
-        const res = await fetch ('https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts');
-        const data = await res.json();
-        // console.log(data);
-        setPosts(data.posts);
+        const res = await fetch('https://ainow0ifew.microcms.io/api/v1/posts', {　// 管理画面で取得したエンドポイントを入力してください。
+          headers: {　// fetch関数の第二引数にheadersを設定でき、その中にAPIキーを設定します。
+            'X-MICROCMS-API-KEY': process.env.NEXT_PUBLIC_MICROCMS_API_KEY as string, // 管理画面で取得したAPIキーを入力してください。
+          },
+        })
+        const { contents } = await res.json()
+        setPosts(contents);
       } catch(error) {
-        console.error('記事取得中にエラーが発生しました：',error);
+        console.error('記事取得中にエラーが発生しました',error);
       } finally {
-        setIsLoading (false);
+        setIsLoading(false);
       }
     }
-    fetcher();
-  },[]);
+
+    fetcher()
+  }, [])
 
   if(isLoading) {
     return <p>読み込み中です...</p>;

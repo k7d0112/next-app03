@@ -4,18 +4,18 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 
-type BlogPost = {
-  id:number,
-  title:string,
-  content:string,
-  categories:string[],
-  createdAt:string,
-  thumbnailUrl:string,
+type MicroCmsPost = {
+  id: string
+  title: string
+  content: string
+  createdAt: string
+  categories: { id: string; name: string }[]
+  thumbnail: { url: string; height: number; width: number }
 };
 
 export default function BlogDetail () {
   const { id } = useParams();
-  const [post, setPost] = useState<BlogPost | null>(null);
+  const [post, setPost] = useState<MicroCmsPost | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const formatDateHyphen = (dataString:string) => {
@@ -37,9 +37,15 @@ export default function BlogDetail () {
   useEffect (() => {
     const fetcher = async () => {
       try {
-        const res = await fetch (`https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts/${id}`);
+        const res = await fetch (`https://ainow0ifew.microcms.io/api/v1/posts/${id}`,
+          {
+            headers:{
+              'X-MICROCMS-API-KEY': process.env.NEXT_PUBLIC_MICROCMS_API_KEY as string,
+            },
+          },
+        );
         const data = await res.json();
-        setPost(data.post);
+        setPost(data);
       } catch (error) {
         console.error('記事取得中にエラーが発生しました：',error);
       } finally {
@@ -55,12 +61,12 @@ export default function BlogDetail () {
 
   return (
     <div className='max-w-[800px] mx-auto py-4 mt-10'>
-      <Image src={post.thumbnailUrl} alt={`${post.title}の画像`} width={800} height={400}/>
+      {post.thumbnail && <Image src={post.thumbnail.url} alt={`${post.title}の画像`} width={800} height={400}/>}
       <div className='p-4'>
         <div className='flex justify-between items-center'>
           <time className='text-[12.8px] text-slate-400 font-sans' dateTime={formatDateHyphen(post.createdAt)}>{formatDateSlash(post.createdAt)}</time>
           <div>
-            {post.categories.map((category,index)=><span className='text-[#06c] text-[12.8px] font-sans border border-[#06c] rounded py-[3.2px] px-[6.4px] mr-2' key={index}>{category}</span>)}
+            {post.categories.map((category,index)=><span className='text-[#06c] text-[12.8px] font-sans border border-[#06c] rounded py-[3.2px] px-[6.4px] mr-2' key={index}>{category.name}</span>)}
           </div>
         </div>
         <h1 className='font-sans text-2xl mt-2'>{post.title}</h1>
