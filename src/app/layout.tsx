@@ -20,7 +20,7 @@ export default function RootLayout({
       <body className={`${inter.className} bg-white text-black`}>
         <header className='p-6 bg-zinc-800 flex justify-between items-center'>
           <h1><Link href='/' className='text-white font-sans font-bold'>Blog</Link></h1>
-          <Link href='/Contact' className='text-white font-sans font-bold'>お問い合わせ</Link>
+          <Link href='/contact' className='text-white font-sans font-bold'>お問い合わせ</Link>
         </header>
         {children}
       </body>
