@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { PostForm } from '../_component/PostForm';
 import { Category } from '@/app/types/Category';
-import { post } from '@/app/types/post';
+import { Post } from '@/app/types/post';
 
 export default function Page() {
   const [title, setTitle] =useState<string>('');
@@ -20,7 +20,7 @@ export default function Page() {
       try {
         setIsLoading(true);
         const res = await fetch (`/api/admin/posts/${id}`);
-        const { post }: { post: post } = await res.json();
+        const { post }: { post: Post } = await res.json();
         setTitle(post.title);
         setContent(post.content);
         setThumbnailUrl(post.thumbnailUrl);
@@ -64,7 +64,6 @@ export default function Page() {
     <>
       <h1 className='text-xl font-bold'>記事編集</h1>
       <PostForm
-        mode='edit'
         title={title}
         setTitle={setTitle}
         content={content}

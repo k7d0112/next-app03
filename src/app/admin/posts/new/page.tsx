@@ -33,7 +33,6 @@ export default function Page() {
     <>
       <h1 className='text-xl font-bold'>記事作成</h1>
       <PostForm
-        mode='new'
         title={title}
         setTitle={setTitle}
         content={content}

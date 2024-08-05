@@ -2,6 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import { Post } from '@/app/types/post';
+import { Category } from '@/app/types/Category';
+import { formatDateHyphen } from '@/app/_functions/formatDateHyphen';
+import { formatDateSlash } from '@/app/_functions/formatDateSlash';
 import Image from 'next/image';
 
 // type MicroCmsPost = {
@@ -13,35 +17,10 @@ import Image from 'next/image';
 //   thumbnail: { url: string; height: number; width: number }
 // };
 
-type Post = {
-  id: number,
-  title: string,
-  content:string,
-  createdAt: string,
-  thumbnailUrl: string,
-  postCategories: {id: number, name:string}[],
-};
-
 export default function BlogDetail () {
   const { id } = useParams();
   const [post, setPost] = useState<Post | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  const formatDateHyphen = (dataString:string) => {
-    const date = new Date(dataString);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    return `${year}-${month}-${day}`;
-  }
-
-  const formatDateSlash = (dataString:string) => {
-    const date = new Date(dataString);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    return `${year}/${month}/${day}`;
-  }
 
   useEffect (() => {
     const fetcher = async () => {

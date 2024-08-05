@@ -28,7 +28,6 @@ export default function Page() {
     <>
       <h1 className='text-2xl font-bold'>カテゴリー作成</h1>
       <CategoryForm
-        mode='new'
         name={name}
         setName={setName}
         onSubmit={handleSubmit}

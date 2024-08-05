@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { formatDateHyphen } from '@/app/_functions/formatDateHyphen';
+import { formatDateSlash } from '@/app/_functions/formatDateSlash';
 
 // type BlogPosts = {
 //   id:number,
@@ -38,20 +40,6 @@ type BlogProps = {
 };
 
 function Blog ({posts}:BlogProps) {
-  const formatDateHyphen = (dateString:string) => {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    return `${year}-${month}-${day}`;
-  }
-  const formatDateSlash = (dateString:string) => {
-    const date= new Date (dateString);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    return `${year}/${month}/${day}`;
-  }
   return (
     <>
       {posts.map((post:Post)=>{

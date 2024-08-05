@@ -2,12 +2,12 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { post } from '@/app/types/post';
-import { formatDateHyphen } from '@/app/functions/formatDateHyphen';
-import { formatDateSlash } from '@/app/functions/formatDateSlash';
+import { Post } from '@/app/types/post';
+import { formatDateHyphen } from '@/app/_functions/formatDateHyphen';
+import { formatDateSlash } from '@/app/_functions/formatDateSlash';
 
 export default function Page() {
-  const [posts, setPosts] = useState<post[]>([])
+  const [posts, setPosts] = useState<Post[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {

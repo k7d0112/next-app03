@@ -7,11 +7,6 @@ import Link from 'next/link';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export const metaData: Metadata = {
-  title: 'ブログサイト＿管理者ページ',
-  description: 'ブログサイトの管理者ページです',
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
