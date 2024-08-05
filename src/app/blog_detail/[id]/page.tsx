@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { Post } from '@/app/types/post';
-import { Category } from '@/app/types/Category';
+import { Category } from '@/app/_types/Category';
 import { formatDateHyphen } from '@/app/_functions/formatDateHyphen';
 import { formatDateSlash } from '@/app/_functions/formatDateSlash';
 import Image from 'next/image';

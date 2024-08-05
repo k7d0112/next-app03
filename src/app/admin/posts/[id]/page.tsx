@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { PostForm } from '../_component/PostForm';
-import { Category } from '@/app/types/Category';
+import { Category } from '@/app/_types/Category';
 import { Post } from '@/app/types/post';
 
 export default function Page() {

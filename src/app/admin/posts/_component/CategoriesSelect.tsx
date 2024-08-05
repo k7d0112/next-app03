@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
-import { Category } from '@/app/types/Category';
+import { Category } from '@/app/_types/Category';
 
 type Props = {
   selectedCategories: Category[],

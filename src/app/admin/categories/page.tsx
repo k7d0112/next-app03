@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { Category } from '@/app/types/Category';
+import { Category } from '@/app/_types/Category';
 
 export default function Page () {
   const [categories, setCategories] = useState<Category[]>([]);

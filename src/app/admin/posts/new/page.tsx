@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Category } from '@/app/types/Category';
+import { Category } from '@/app/_types/Category';
 import { CategoriesSelect } from '../_component/CategoriesSelect';
 import { PostForm } from '../_component/PostForm';
 

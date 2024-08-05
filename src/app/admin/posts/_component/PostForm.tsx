@@ -1,4 +1,4 @@
-import { Category } from '@/app/types/Category';
+import { Category } from '@/app/_types/Category';
 import React from 'react';
 import { CategoriesSelect } from './CategoriesSelect';
 
