@@ -1,17 +1,21 @@
 import { Category } from '@/app/_types/Category';
 import React from 'react';
+import { useState, useEffect } from 'react';
 import { CategoriesSelect } from './CategoriesSelect';
+import { supabase } from '@/utils/supabase';
+import Image from 'next/image';
 
 type Props = {
   title: string,
   setTitle: (title: string) => void,
   content: string,
   setContent: (content: string) => void,
-  thumbnailUrl: string,
-  setThumbnailUrl: (thumbnailUrl: string) => void,
+  thumbnailImageKey: string,
+  setThumbnailImageKey: (thumbnailImageKey: string) => void,
   categories: Category[],
   setCategories: (categories: Category[]) => void,
   onSubmit: (e: React.FormEvent) => void,
+  onChange: (e: React.FormEvent) => void,
   onDelete?: () => void,
 };
 
@@ -20,13 +24,32 @@ export const PostForm: React.FC<Props> = ({
   setTitle,
   content,
   setContent,
-  thumbnailUrl,
-  setThumbnailUrl,
+  thumbnailImageKey,
+  setThumbnailImageKey,
   categories,
   setCategories,
   onSubmit,
+  onChange,
   onDelete,
 }) => {
+  const [thumbnailImageUrl, setThumbnailImageUrl] = useState<null | string>(null,);
+
+  useEffect(() => {
+    if(!thumbnailImageKey) return;
+
+    const fetcher = async () => {
+      const {
+        data: { publicUrl },
+      } = await supabase.storage
+      .from('post_thumbnail')
+      .getPublicUrl(thumbnailImageKey)
+
+      setThumbnailImageUrl(publicUrl);
+    }
+
+    fetcher();
+  }, [thumbnailImageKey]);
+
   return (
     <form className='mt-8' onSubmit={onSubmit}>
       <dl>
@@ -39,8 +62,13 @@ export const PostForm: React.FC<Props> = ({
           <dd><textarea name="content" id="content" rows={2} className='p-3 border border-gray-300 rounded w-full resize-none' value={content} onChange={(e) => setContent(e.target.value)}></textarea></dd>
         </div>
         <div className='mt-4'>
-          <dt><label htmlFor="thumbnailUrl">サムネイルURL</label></dt>
-          <dd><input type="text" id='thumbnailUrl' name='thumbnailUrl' className='p-3 border border-gray-300 rounded w-full' value={thumbnailUrl} onChange={(e) => setThumbnailUrl(e.target.value)}/></dd>
+          <dt><label htmlFor="thumbnailImageKey">サムネイルURL</label></dt>
+          <dd><input type="file" id='thumbnailImageKey' className='p-3 border border-gray-300 rounded w-full' onChange={onChange} accept='image/*' /></dd>
+          {thumbnailImageUrl && (
+            <div className='mt-2'>
+              <Image src={thumbnailImageUrl} alt='thumbnail' width={400} height={400} />
+            </div>
+          )}
         </div>
         <div className='mt-4'>
           <dt><label htmlFor="categories">カテゴリー</label></dt>

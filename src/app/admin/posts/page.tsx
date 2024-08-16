@@ -2,18 +2,27 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { Post } from '@/app/types/post';
+import { Post } from '@/app/_types/Post';
 import { formatDateHyphen } from '@/app/_functions/formatDateHyphen';
 import { formatDateSlash } from '@/app/_functions/formatDateSlash';
+import { useSupabaseSession } from '@/app/_hooks/useSupabaseSession';
 
 export default function Page() {
   const [posts, setPosts] = useState<Post[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { token } = useSupabaseSession();
 
   useEffect(() => {
+    if (!token) return;
+
     const fetcher = async () => {
       try {
-        const res = await fetch('/api/admin/posts');
+        const res = await fetch('/api/admin/posts', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: token,
+          },
+        });
         const { posts } = await res.json();
         setPosts(posts);
       } catch (error) {
@@ -23,7 +32,7 @@ export default function Page() {
       }
     }
     fetcher();
-  },[]);
+  },[token]);
 
   if(isLoading) {
     return <p>読み込み中です...</p>

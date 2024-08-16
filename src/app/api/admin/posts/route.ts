@@ -1,10 +1,16 @@
 import { PrismaClient } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
+import { supabase } from '@/utils/supabase';
 
 const prisma = new PrismaClient();
 
 // 管理者＿記事一覧取得
 export const GET = async (request:NextRequest) => {
+  const token = request.headers.get('Authorization') ?? '';
+
+  const { error } = await supabase.auth.getUser(token);
+  if (error) return NextResponse.json({ status: error.message }, { status: 400});
+
   try {
     const posts = await prisma.post.findMany({
       include: {
