@@ -3,18 +3,23 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { CategoryForm } from '../_components/CategoryForm';
+import { useSupabaseSession } from '@/app/_hooks/useSupabaseSession';
 
 export default function Page() {
   const [name, setName] = useState<string>('');
   const router = useRouter();
+  const { token } = useSupabaseSession();
 
   const handleSubmit = async(e: React.FormEvent) => {
+    if(!token) return;
+
     e.preventDefault();
 
     const res = await fetch('/api/admin/categories', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: token,
       },
       body: JSON.stringify({ name }),
     })

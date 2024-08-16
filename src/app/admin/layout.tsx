@@ -1,17 +1,19 @@
 'use client'
 
-import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouteGuard } from '../_hooks/useRouteGuard';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export default function RootLayout({
+export default function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+	useRouteGuard();
+
 	const [isSelected, setIsSelected] = useState<number>(1);
 	const handleClick = (buttonId: number) => {
 		setIsSelected(buttonId);
